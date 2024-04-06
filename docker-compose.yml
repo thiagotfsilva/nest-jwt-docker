@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-auth
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+    environment:
+      - PORT=3000
+    depends_on:
+      - db
+  db:
+    container_name: db-app
+    image: "postgres"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - /db-data:/app/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  db_data:
